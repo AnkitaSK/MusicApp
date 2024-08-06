@@ -20,10 +20,20 @@ class LoginPage extends ConsumerStatefulWidget {
 class _LoginPageState extends ConsumerState<LoginPage> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  final formKey = GlobalKey<FormState>();
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+    formKey.currentState!.validate();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final isLoading = ref.watch(authViewmodelProvider)?.isLoading == true;
+    final isLoading = ref
+        .watch(authViewmodelProvider.select((val) => val?.isLoading == true));
 
     ref.listen(
       authViewmodelProvider,
@@ -79,15 +89,15 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                   AuthGradientButton(
                     title: 'Sign In',
                     onTap: () async {
-                      final response = await AuthRemoteRepository().login(
-                          email: emailController.text,
-                          password: passwordController.text);
-
-                      final val = switch (response) {
-                        Left(value: final l) => l,
-                        Right(value: final r) => r
-                      };
-                      print(val);
+                      if (formKey.currentState!.validate()) {
+                        await ref
+                            .read(authViewmodelProvider.notifier)
+                            .loginUser(
+                                email: emailController.text,
+                                password: passwordController.text);
+                      } else {
+                        showSnackBar(context, 'Missing fields');
+                      }
                     },
                   ),
                   const SizedBox(
