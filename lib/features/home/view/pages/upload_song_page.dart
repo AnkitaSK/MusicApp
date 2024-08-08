@@ -117,9 +117,7 @@ class _UploadSongPageState extends ConsumerState<UploadSongPage> {
                 hintText: 'Pick a song',
                 controller: null,
                 readOnly: true,
-                onTap: () {
-                  selectedAudio;
-                },
+                onTap: selectAudio,
               ),
               const SizedBox(
                 height: 20,
