@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:client/core/theme/app_pallete.dart';
 import 'package:client/core/widgets/custom_textfield.dart';
+import 'package:client/features/home/view/widgets/audio_wave.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter/material.dart';
@@ -113,12 +114,14 @@ class _UploadSongPageState extends ConsumerState<UploadSongPage> {
               const SizedBox(
                 height: 40,
               ),
-              CustomTextfield(
-                hintText: 'Pick a song',
-                controller: null,
-                readOnly: true,
-                onTap: selectAudio,
-              ),
+              selectedAudio != null
+                  ? AudioWave(path: selectedAudio!.path)
+                  : CustomTextfield(
+                      hintText: 'Pick a song',
+                      controller: null,
+                      readOnly: true,
+                      onTap: selectAudio,
+                    ),
               const SizedBox(
                 height: 20,
               ),
