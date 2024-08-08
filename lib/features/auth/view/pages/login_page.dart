@@ -6,6 +6,7 @@ import 'package:client/features/auth/view/pages/signup_page.dart';
 import 'package:client/features/auth/view/widgets/auth_gradient_button.dart';
 import 'package:client/features/auth/view/widgets/custom_textfield.dart';
 import 'package:client/features/auth/viewmodel/auth_viewmodel.dart';
+import 'package:client/features/home/view/pages/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
@@ -40,13 +41,13 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       (_, next) {
         next?.when(
             data: (data) {
-              // TODO: navigate to the home page
-              // Navigator.push(
-              //   context,
-              //   MaterialPageRoute(
-              //     builder: (context) => const LoginPage(),
-              //   ),
-              // );
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const HomePage(),
+                ),
+                (_) => false,
+              );
             },
             error: (error, stackTrace) {
               showSnackBar(context, error.toString());
