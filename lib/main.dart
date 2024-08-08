@@ -1,6 +1,8 @@
+import 'package:client/core/providers/current_user_notifier.dart';
 import 'package:client/core/theme/theme.dart';
 import 'package:client/features/auth/view/pages/signup_page.dart';
 import 'package:client/features/auth/viewmodel/auth_viewmodel.dart';
+import 'package:client/features/home/view/pages/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -8,9 +10,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final container = ProviderContainer();
   await container.read(authViewmodelProvider.notifier).initSharedPreferences();
-  final userModel =
-      await container.read(authViewmodelProvider.notifier).getData();
-  print(userModel);
+  await container.read(authViewmodelProvider.notifier).getData();
   runApp(
     UncontrolledProviderScope(
       container: container,
@@ -19,16 +19,18 @@ Future<void> main() async {
   );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
   // This widget is the root of your application.
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final currentUser = ref.watch(currentUserNotifierProvider);
+
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Music App',
       theme: AppTheme.darkThemeMode,
-      home: const SignupPage(),
+      home: currentUser == null ? const SignupPage() : HomePage(),
     );
   }
 }
